@@ -8,11 +8,12 @@ const csso = require('gulp-csso');
 const htmlmin = require('gulp-html-minifier');
 const imagemin = require('gulp-imagemin');
 const rename = require('gulp-rename');
+const react = require('gulp-react');
 
 const stylesPath = 'app/assets/styles/*.{styl,css}';
 const scriptsPath = 'app/assets/scripts/*.js';
 const imagePath = 'app/assets/images/*';
-const templatesPath = './views/*.html';
+const templatesPath = './views/';
 
 gulp.task('styles', function() {
     return gulp
@@ -43,11 +44,17 @@ gulp.task('imageMin', function() {
         .pipe(gulp.dest('./public/img'))
 });
 
-gulp.task('templates', ['styles', 'scripts'],  function() {
+gulp.task('htmlTemplates', ['styles', 'scripts'],  function() {
     return gulp
-        .src(templatesPath)
+        .src(templatesPath + '*.html')
         .pipe(htmlmin({collapseWhitespace: true}))
         .pipe(gulp.dest('./dist/'))
+});
+
+gulp.task('reactTemplates', function () {
+    return gulp.src(templatesPath + '*.jsx')
+        .pipe(react())
+        .pipe(gulp.dest('dist'));
 });
 
 gulp.task('watch', function () {
@@ -65,6 +72,6 @@ gulp.task('startServer', function() {
     })
 });
 
-gulp.task('build', ['imageMin', 'styles', 'scripts', 'templates']);
+gulp.task('build', ['imageMin', 'styles', 'scripts', 'htmlTemplates', 'reactTemplates']);
 
 gulp.task('default', ['build', 'startServer', 'watch']);
