@@ -7,7 +7,6 @@ const uglify = require('gulp-uglify');
 const csso = require('gulp-csso');
 const htmlmin = require('gulp-html-minifier');
 const imagemin = require('gulp-imagemin');
-const swig = require('gulp-swig');
 const rename = require('gulp-rename');
 
 const stylesPath = 'app/assets/styles/*.{styl,css}';
@@ -52,7 +51,8 @@ gulp.task('templates', ['styles', 'scripts'],  function() {
 });
 
 gulp.task('watch', function () {
-    gulp.watch(['app/assets/**/*.{styl,css}', scriptsPath]);
+    gulp.watch('app/assets/**/*.{styl,css}', ['styles']);
+    gulp.watch(scriptsPath, ['scripts']);
 });
 
 gulp.task('startServer', function() {
